@@ -23,7 +23,7 @@ startButton.addEventListener("click", function () {
 } )
 
 pauseButton.addEventListener("click", function() {
-	pauseGame();
+	pauseGame(1);
 })
 
 
@@ -31,7 +31,7 @@ pauseButton.addEventListener("click", function() {
 let snake = {
 	color:"red",
 	direction:"right",
-	speed:300,
+	speed:100,
 	tail: [
 		{x:5, y:5}, {x:4, y:5}, {x:3, y:5}
 	]
@@ -60,8 +60,7 @@ function startGame() {
 	isPaused = 0;
 	lastTime = 0;
 	requestAnimationFrame(gameLoop);
-	pauseButton.style.display="block";
-	
+	pauseButtonToggle();	
 }
 
 function startPageToggle(p) {
@@ -69,19 +68,38 @@ function startPageToggle(p) {
 	startPage.style.display = p ? "flex" : "none";
 
 }
+let pausebuttonstatus = 0;
+function pauseButtonToggle() {
 
-function pauseGame() {
+	if(pausebuttonstatus) {
+		pausebuttonstatus = 0;
+	}
+	else {
+		pausebuttonstatus = 1;
+	}
+
+		pauseButton.style.display = pausebuttonstatus ? "block" : "none";
+
+}
+
+function pauseGame(c) {
 	startPageToggle(1);
 	isPaused = 1;
+	pauseButtonToggle();
+	startButton.innerHTML = c ? "Resume" : "Start Again";
+
 }
 
 function gameOver() {
-	pauseGame();
+	pauseGame(0);
 	startAgain();
 }
 
 function startAgain() {
 	snake.tail=[{x:5, y:5}, {x:4, y:5}, {x:3, y:5}];
+	snake.direction = "right";
+	inputQueue = [];
+	
 }
 
 // Resize the canvas responsively while keeping the fixed grid count (25x25) most convienent for all screens and for fairplay
@@ -242,6 +260,9 @@ document.addEventListener("keydown", function(e) {
                 inputQueue.push("right");
             }
             break;
+
+		case "Escape" :
+			pauseGame(1);
     }
 });
 
@@ -278,6 +299,7 @@ function MoveSnake() {
 	for (let i =1; i< snake.tail.length; i++) {
 		if(headX == snake.tail[i].x && headY == snake.tail[i].y) {
 			gameOver();
+			return;
 		}
 	}
 	
@@ -286,7 +308,7 @@ function MoveSnake() {
 	//Check for food collision
 		if(headX == food.x && headY == food.y) {
 
-			snake.tail.push({x:food.x, y:food.y});
+			//snake.tail.push({x:food.x, y:food.y});
 			food.x = Math.floor(Math.random() * gridColumns);
 			food.y = Math.floor(Math.random() * gridRows);
 		}
