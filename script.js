@@ -236,36 +236,33 @@ document.addEventListener("keydown", function(e) {
         case "w":
         case "W":
             e.preventDefault();
-            if (lastDirection !== "down" && lastDirection !== "up") {
-                inputQueue.push("up");
-            }
+            
+                queueDirection("up");
+            
             break;
 
         case "ArrowDown":
         case "s":
         case "S":
             e.preventDefault();
-            if (lastDirection !== "up" && lastDirection !== "down") {
-                inputQueue.push("down");
-            }
+                queueDirection("down");
+            
             break;
 
         case "ArrowLeft":
         case "a":
         case "A":
             e.preventDefault();
-            if (lastDirection !== "right" && lastDirection !== "left") {
-                inputQueue.push("left");
-            }
+                queueDirection("left");
+            
             break;
 
         case "ArrowRight":
         case "d":
         case "D":
             e.preventDefault();
-            if (lastDirection !== "left" && lastDirection !== "right") {
-                inputQueue.push("right");
-            }
+                queueDirection("right");
+            
             break;
 
 		case "Escape" :
