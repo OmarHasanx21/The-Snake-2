@@ -31,7 +31,7 @@ pauseButton.addEventListener("click", function() {
 let snake = {
 	color:"red",
 	direction:"right",
-	speed:100,
+	speed:200,
 	tail: [
 		{x:5, y:5}, {x:4, y:5}, {x:3, y:5}
 	]
@@ -89,6 +89,7 @@ function pauseGame(c) {
 	isPaused = 1;
 	pauseButtonToggle();
 	startButton.innerHTML = c ? "Resume" : "Start Again";
+	inputQueue = [];
 
 }
 
@@ -209,6 +210,10 @@ function drawGameComponents() {
 	ctx.textAlign ="right";
 	ctx.fillText(fps, canvas.width-20, 30);
 	ctx.textAlign ="left";
+
+	ctx.fillStyle = "#fff";
+	ctx.font = "20px Arial";
+	ctx.fillText("Score: " + (snake.tail.length - 3), (canvas.width/2) - 50, 30);
 	
 }
 
