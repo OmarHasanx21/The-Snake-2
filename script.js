@@ -70,7 +70,7 @@ function startPageToggle(p) {
 	startPage.style.display = p ? "flex" : "none";
 
 }
-let pausebuttonstatus = 0;
+
 function pauseButtonToggle(show) {
 
 	pauseButton.style.display = show ? "block" : "none";
@@ -274,11 +274,7 @@ function MoveSnake() {
 	let headX = snake.tail[0].x;
 	let headY = snake.tail[0].y;
 
-		//check for wall collision
-		if(headX< 0 || headX>= gridColumns || headY < 0 || headY >= gridRows) {
-			gameOver();
-			return;
-		}
+		
 	switch(snake.direction) {
 		case "up":
 			headY--;
@@ -305,6 +301,12 @@ function MoveSnake() {
 			return;
 		}
 	}
+
+	//check for wall collision
+		if(headX< 0 || headX>= gridColumns || headY < 0 || headY >= gridRows) {
+			gameOver();
+			return;
+		}
 	
 
 
@@ -328,7 +330,7 @@ function getNewFood() {
 		newFoodY = Math.floor(Math.random() * gridRows);
 	}
 	while(snake.tail.some(segment => segment.x === newFoodX && segment.y === newFoodY));
-	
+
 	food.x = newFoodX;
 	food.y = newFoodY;
 	
