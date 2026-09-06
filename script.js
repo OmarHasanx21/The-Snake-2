@@ -60,7 +60,9 @@ function startGame() {
 	isPaused = 0;
 	lastTime = 0;
 	requestAnimationFrame(gameLoop);
-	pauseButtonToggle();	
+	pauseButtonToggle();
+	inputQueue = [];
+
 }
 
 function startPageToggle(p) {
@@ -319,6 +321,67 @@ function MoveSnake() {
 	
 }
 
+//add touch support for mobile devices
+function queueDirection(newDirection) {
+	if(isPaused) return;
+	if(inputQueue.length >= 2) return;
+	
+	const lastDirection = inputQueue.length > 0
+		? inputQueue[inputQueue.length - 1]
+		: snake.direction;
+		if(newDirection === "up" && lastDirection !== "down" && lastDirection !== "up") {
+			inputQueue.push("up");
+		}
+		else if (newDirection === "down" && lastDirection !== "up" && lastDirection !== "down") {
+       		 inputQueue.push("down");
+   		 } else if (newDirection === "left" && lastDirection !== "right" && lastDirection !== "left") {
+       		 inputQueue.push("left");
+   		 } else if (newDirection === "right" && lastDirection !== "left" && lastDirection !== "right") {
+        inputQueue.push("right");
+    }
+}
+
+let touchStartX = 0;
+let touchStartY = 0;
+const minSwipeDistance = 30; // Minimum distance in pixels to count as a swipe (prevents accidental taps)
+
+window.addEventListener("touchstart", function(e) {
+    // Only track single-finger gestures
+    if (e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    }
+}, { passive: true });
+
+window.addEventListener("touchend", function(e) {
+    if (e.changedTouches.length === 1) {
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+
+        const diffX = touchEndX - touchStartX;
+        const diffY = touchEndY - touchStartY;
+
+        // Check if movement exceeds threshold
+        if (Math.abs(diffX) > minSwipeDistance || Math.abs(diffY) > minSwipeDistance) {
+            // Determine if the swipe was more horizontal or vertical
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                // Horizontal swipe (Left or Right)
+                if (diffX > 0) {
+                    queueDirection("right");
+                } else {
+                    queueDirection("left");
+                }
+            } else {
+                // Vertical swipe (Up or Down)
+                if (diffY > 0) {
+                    queueDirection("down");
+                } else {
+                    queueDirection("up");
+                }
+            }
+        }
+    }
+}, { passive: true });
 
 
 // 1. Prevent touchpad pinch zoom and Ctrl + Mouse Wheel zoom
