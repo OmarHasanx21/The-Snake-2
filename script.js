@@ -60,7 +60,7 @@ function startGame() {
 	isPaused = 0;
 	lastTime = 0;
 	requestAnimationFrame(gameLoop);
-	pauseButtonToggle();
+	pauseButtonToggle(true);
 	inputQueue = [];
 
 }
@@ -71,23 +71,16 @@ function startPageToggle(p) {
 
 }
 let pausebuttonstatus = 0;
-function pauseButtonToggle() {
+function pauseButtonToggle(show) {
 
-	if(pausebuttonstatus) {
-		pausebuttonstatus = 0;
-	}
-	else {
-		pausebuttonstatus = 1;
-	}
-
-		pauseButton.style.display = pausebuttonstatus ? "block" : "none";
+	pauseButton.style.display = show ? "block" : "none";
 
 }
 
 function pauseGame(c) {
 	startPageToggle(1);
 	isPaused = 1;
-	pauseButtonToggle();
+	pauseButtonToggle(false);
 	startButton.innerHTML = c ? "Resume" : "Start Again";
 	inputQueue = [];
 
@@ -168,7 +161,7 @@ function drawGameComponents() {
 	if (!ctx) return;
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+/*
 	//Draw the grid (experemintal)
 	ctx.beginPath();
 	
@@ -185,7 +178,7 @@ function drawGameComponents() {
 	ctx.lineWidth = 1;
 	ctx.stroke();
 	ctx.closePath();
-
+*/
 
 
 	//Draw the Snake
@@ -213,7 +206,8 @@ function drawGameComponents() {
 
 	ctx.fillStyle = "#fff";
 	ctx.font = "20px Arial";
-	ctx.fillText("Score: " + (snake.tail.length - 3), (canvas.width/2) - 50, 30);
+	ctx.textAlign ="center";
+	ctx.fillText("Score: " + (snake.tail.length - 3), canvas.width/2, 30);
 	
 }
 
@@ -280,6 +274,11 @@ function MoveSnake() {
 	let headX = snake.tail[0].x;
 	let headY = snake.tail[0].y;
 
+		//check for wall collision
+		if(headX< 0 || headX>= gridColumns || headY < 0 || headY >= gridRows) {
+			gameOver();
+			return;
+		}
 	switch(snake.direction) {
 		case "up":
 			headY--;
@@ -312,14 +311,26 @@ function MoveSnake() {
 	//Check for food collision
 		if(headX == food.x && headY == food.y) {
 
-			//snake.tail.push({x:food.x, y:food.y});
-			food.x = Math.floor(Math.random() * gridColumns);
-			food.y = Math.floor(Math.random() * gridRows);
+			//get New Food
+			getNewFood();
 		}
 		else {
 			//remove the last tail if snake didnt eat food
 			snake.tail.pop();
 		}
+	
+}
+
+function getNewFood() {
+	let newFoodX, newFoodY;
+	do {
+		newFoodX = Math.floor(Math.random() *gridColumns);
+		newFoodY = Math.floor(Math.random() * gridRows);
+	}
+	while(snake.tail.some(segment => segment.x === newFoodX && segment.y === newFoodY));
+	
+	food.x = newFoodX;
+	food.y = newFoodY;
 	
 }
 
