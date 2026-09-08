@@ -113,6 +113,7 @@ function resizeCanvas() {
 
 	canvas.width = boardWidth;
 	canvas.height = boardHeight;
+	canvas.style.backgroundColor = "#000";
 
 	// Center the canvas on screen
 	canvas.style.position = "absolute";
