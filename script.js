@@ -340,9 +340,18 @@ function getNewFood() {
 
 	food.x = newFoodX;
 	food.y = newFoodY;
+	food.color = getRandomColor();
 	
 }
 
+function getRandomColor(type, max, opacity) {
+
+	switch (type) {
+		case "rgb": return `rgb(${Math.floor(Math.random() * max)}, ${Math.floor(Math.random()* max)}, ${Math.floor(Math.random() * max)})`;
+		case "rgba": return `rgba(${Math.floor(Math.random() * max)}, ${Math.floor(Math.random()* max)}, ${Math.floor(Math.random() * max)}, ${opacity})`;
+		default: return `#${Math.floor(Math.random()*16777215).toString(16)}`;
+	}
+}
 //add touch support for mobile devices
 function queueDirection(newDirection) {
 	if(isPaused) return;
