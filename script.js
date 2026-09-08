@@ -113,7 +113,7 @@ function resizeCanvas() {
 
 	canvas.width = boardWidth;
 	canvas.height = boardHeight;
-	canvas.style.backgroundColor = "#000";
+	canvas.style.backgroundColor = "#333";
 
 	// Center the canvas on screen
 	canvas.style.position = "absolute";
@@ -261,7 +261,13 @@ document.addEventListener("keydown", function(e) {
             break;
 
 		case "Escape" :
+			if( isPaused ) {
+				startGame();
+			}
+			else {
 			pauseGame(1);
+			}
+			break;
     }
 });
 
