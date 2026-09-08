@@ -300,6 +300,13 @@ function MoveSnake() {
 
 	}
 
+
+	//check for wall collision
+		if(headX< 0 || headX>= gridColumns || headY < 0 || headY >= gridRows) {
+			gameOver();
+			return;
+		}
+
 	//add the new head
 	snake.tail.unshift({x: headX, y: headY});
 
@@ -311,11 +318,6 @@ function MoveSnake() {
 		}
 	}
 
-	//check for wall collision
-		if(headX< 0 || headX>= gridColumns || headY < 0 || headY >= gridRows) {
-			gameOver();
-			return;
-		}
 	
 
 
@@ -345,7 +347,7 @@ function getNewFood() {
 
 	food.x = newFoodX;
 	food.y = newFoodY;
-	food.color = getRandomColor("rgb", 255, 1);
+	food.color = getRandomColor("hsl", 360, 1);
 	
 }
 
@@ -354,6 +356,7 @@ function getRandomColor(type, max, opacity) {
 	switch (type) {
 		case "rgb": return `rgb(${Math.floor(Math.random() * max)}, ${Math.floor(Math.random()* max)}, ${Math.floor(Math.random() * max)})`;
 		case "rgba": return `rgba(${Math.floor(Math.random() * max)}, ${Math.floor(Math.random()* max)}, ${Math.floor(Math.random() * max)}, ${opacity})`;
+		case "hsl": return `hsl(${Math.floor(Math.random() * max)}, 100%, 60%)`; break;
 		default: return `#${Math.floor(Math.random()*16777215).toString(16)}`;
 	}
 }
