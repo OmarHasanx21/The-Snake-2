@@ -31,7 +31,7 @@ pauseButton.addEventListener("click", function() {
 let snake = {
 	color:"red",
 	direction:"right",
-	speed:200,
+	speed:1000/5,
 	tail: [
 		{x:5, y:5}, {x:4, y:5}, {x:3, y:5}
 	]
@@ -94,6 +94,8 @@ function gameOver() {
 function startAgain() {
 	snake.tail=[{x:5, y:5}, {x:4, y:5}, {x:3, y:5}];
 	snake.direction = "right";
+	snake.speed = 1000/5;
+	getNewFood();
 	inputQueue = [];
 	
 }
@@ -113,7 +115,7 @@ function resizeCanvas() {
 
 	canvas.width = boardWidth;
 	canvas.height = boardHeight;
-	canvas.style.backgroundColor = "#333";
+	canvas.style.backgroundColor = "#222";
 
 	// Center the canvas on screen
 	canvas.style.position = "absolute";
@@ -322,6 +324,9 @@ function MoveSnake() {
 
 			//get New Food
 			getNewFood();
+
+			//make it faster
+			snake.speed *= 0.97;
 		}
 		else {
 			//remove the last tail if snake didnt eat food
@@ -340,7 +345,7 @@ function getNewFood() {
 
 	food.x = newFoodX;
 	food.y = newFoodY;
-	food.color = getRandomColor();
+	food.color = getRandomColor("rgb", 255, 1);
 	
 }
 
